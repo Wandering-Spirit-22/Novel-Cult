@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Comments</title>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: linear-gradient(to bottom, #f5f3ff, #eff6ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .comment-box {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .comment {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .comment:last-child {
+      border-bottom: none;
+    }
+    .actions button {
+      margin-right: 10px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+    .sort-btns button {
+      margin-right: 10px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="comment-box">
+    <div class="sort-btns">
+      <button onclick="sortComments('likes')">Sort by Likes</button>
+      <button onclick="sortComments('dislikes')">Sort by Dislikes</button>
+    </div>
+    <div id="comments"></div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyDrMY8IGn5c0UScMyzGmxo_wIb13jrOQUM",
+    authDomain: "novel-cult-d989e.firebaseapp.com",
+    projectId: "novel-cult-d989e",
+    storageBucket: "novel-cult-d989e.firebasestorage.app",
+    messagingSenderId: "878327056169",
+    appId: "1:878327056169:web:d4f52ff530300d21d79938",
+    measurementId: "G-G27QHBM9T8"
+  };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const currentUser = "alice";
+    const urlParams = new URLSearchParams(window.location.search);
+    const chapterId = urlParams.get("chapter") || "1";
+    const collectionName = `comments_chapter_${chapterId}`;
+
+    let comments = [];
+
+    async function fetchComments() {
+      const snapshot = await db.collection(collectionName).get();
+      comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderComments();
+    }
+
+    function renderComments() {
+      const container = document.getElementById("comments");
+      container.innerHTML = "";
+      comments.forEach(comment => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `
+          <p><strong>${comment.author}:</strong> ${comment.text}</p>
+          <div class="actions">
+            <button onclick="vote('${comment.id}', 'like')">👍 ${comment.likes}</button>
+            <button onclick="vote('${comment.id}', 'dislike')">👎 ${comment.dislikes}</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function vote(id, type) {
+      const commentRef = db.collection(collectionName).doc(id);
+      const doc = await commentRef.get();
+      const data = doc.data();
+
+      if (!data) return;
+
+      if (type === 'like' && !data.likedBy.includes(currentUser)) {
+        data.likedBy.push(currentUser);
+        data.likes = data.likedBy.length;
+        data.dislikedBy = data.dislikedBy.filter(u => u !== currentUser);
+        data.dislikes = data.dislikedBy.length;
+      } else if (type === 'dislike' && !data.dislikedBy.includes(currentUser)) {
+        data.dislikedBy.push(currentUser);
+        data.dislikes = data.dislikedBy.length;
+        data.likedBy = data.likedBy.filter(u => u !== currentUser);
+        data.likes = data.likedBy.length;
+      }
+
+      await commentRef.set(data);
+      fetchComments();
+    }
+
+    function sortComments(by) {
+      comments.sort((a, b) => b[by] - a[by]);
+      renderComments();
+    }
+
+    fetchComments();
+  </script>
+</body>
+</html>

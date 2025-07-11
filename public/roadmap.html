@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galaxy Aurora Background</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+      height: 140vh;
+    }
+
+    .section {
+      height: 170vh;
+      position: relative;
+    }
+
+    .galaxy-section {
+      background: radial-gradient(ellipse at bottom, #15002b, #000);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stars,
+    .aurora,
+    .planet {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .stars {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration) ease-in-out infinite;
+    }
+
+    .aurora {
+      top: -20%;
+      left: -20%;
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(ellipse at center, rgba(128, 0, 255, 0.3) 0%, rgba(0, 0, 0, 0) 60%);
+      transform: rotate(25deg);
+      filter: blur(80px);
+      animation: moveAurora 20s ease-in-out infinite alternate;
+      z-index: 2;
+    }
+
+    
+    .content {
+      z-index: 3;
+      text-align: center;
+      position: relative;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes moveAurora {
+      0% { transform: rotate(25deg) translate(0, 0); }
+      100% { transform: rotate(30deg) translate(20px, 20px); }
+    } 
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1e293b;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #334155;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    /* Logo / Back arrow */
+    .navbar-left {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-left-mobile img {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+    /* Centered search */
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar-center input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      background-color: #334155;
+      color: #f1f5f9;
+      font-size: 1rem;
+    }
+
+    .navbar-center .search-icon {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #f1f5f9;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .navbar-links a,
+    .navbar-right > a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .home-tool{
+      position: relative;
+    }
+    .home-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: 15px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .home-tool:hover .tooltip{
+      opacity: 1;
+    }
+    /* Dropdown (hidden by default) */
+    .dropdown {
+      display: none;
+      position: relative;
+    }
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #f1f5f9;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      min-width: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #f1f5f9;
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background-color: #334155;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+@media (max-width: 768px) {
+  .card:hover {
+    transform: scale(1); /* Reduced scaling for mobile UI */
+  }
+}
+
+    .icon-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .icon-avatar:hover {
+      transform: scale(1.1);
+    }
+
+    .container {
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+
+.cover-img {
+      width: 280px;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    @media (max-width: 768px) {
+    .navbar {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .navbar-left-mobile {
+      flex: 0;
+    }
+
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-right {
+      flex: 0;
+    }
+  }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      /* Logo swap */
+      .navbar-left-pc { display: none; }
+      .navbar-left-mobile { display: flex; }
+
+      /* Hide all regular nav items */
+      .navbar-links,
+      .nav-item {
+        display: none !important;
+      }
+      .navbar-right > a.nav-item {
+        display: none !important;
+      }
+
+      /* Show our “More ▼” dropdown */
+      .dropdown {
+        display: block;
+      }
+
+      /* Hide bottom nav entirely */
+      .mobile-navbar {
+        display: none;
+      }
+      
+
+      /* Stack cards full‑width on mobile */
+      .novels-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.5rem; }
+    }
+    @media (min-width: 769px) {
+      .navbar-left-mobile { display: none; }
+    }
+    
+    /* Mobile bottom navbar */
+    .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e293b;
+        padding: 0.5rem 0;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+      }
+
+      .mobile-navbar a {
+        color: #f1f5f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .mobile-navbar a img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Hide mobile navbar on larger screens */
+      .mobile-navbar {
+        display: flex;
+        visibility: visible;
+      }
+      
+
+    @media (min-width: 769px) {
+      .mobile-navbar {
+        visibility: hidden;
+      }
+    }
+
+        /* Mobile layout */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0.8rem 1.2rem;
+      }
+
+      .navbar-mobile-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .navbar-left-pc,
+      .navbar-center-pc,
+      .navbar-right-pc {
+        display: none !important;
+      }
+
+      .navbar-left-mobile {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+
+      .navbar-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 0 0.5rem;
+      }
+
+      .navbar-center input {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .navbar-right {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+    .more-button {
+      display: flex;
+      align-items: center;
+      gap: 4px; /* spacing between "More" and arrow */
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .arrow {
+      font-size: 0.75em;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <!-- PC logo -->
+    <a href="index.html" class="navbar-left navbar-left-pc home-tool">Novel Cult
+      <div class="tooltip">Home</div>
+    </a>
+    <!-- Mobile back‑arrow + label -->
+    <a href="community.html" class="navbar-left navbar-left-mobile">
+      <img src="https://i.ibb.co/twMCJrMP/Screenshot-2025-04-18-222419.png" alt="Back"/>Roadmap
+    </a>
+    
+        <div class="navbar-center">
+          <input type="text" placeholder="Search novels..." />
+        </div>
+    
+       <!-- Right side -->
+    <div class="navbar-right">
+        <!-- Desktop links -->
+        <nav class="navbar-links">
+          <a href="my_list.html" class="nav-item">📚Library</a>
+          <a href="ranking.html" class="nav-item">Ranking</a>
+          <a href="latest.html" class="nav-item">Latest</a>
+          <a href="popular.html" class="nav-item">Popular</a>
+        </nav>
+        <!-- Desktop icons -->
+        <a href="profile.html" class="nav-item">
+          <img class="icon-avatar" src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Profile"/>
+        </a>
+        <a href="community.html" class="nav-item">
+          <img class="icon-avatar" src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="Community"/>
+        </a>
+  
+        <!-- Mobile “More ▼” dropdown -->
+        <div class="dropdown">
+          <button id="dropdown-button" class="more-button">
+            <span>More</span>
+            <span class="arrow">▼</span>
+          </button>
+          <div id="dropdown-menu" class="dropdown-content">
+            <a href="ranking.html">Ranking</a>
+            <a href="latest.html">Latest</a>
+            <a href="popular.html">Popular</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+  <section class="section galaxy-section">
+    <div class="stars"></div>
+    <div class="aurora"></div>
+    <div class="content">
+      <h1>Roadmap</h1>
+      <p>1. Make popular section ui better  - &#x2705; </p>
+      <p>2. Fix the about section ui  - &#x2705;</p>
+      <p>3. Add the Roadmap button and write FP - &#x2705;</p>
+      <p>4. Add tooltip in navbar - &#x2705;</p>
+      <p>5. Add chapter list button in pc  - &#x2705;</p>
+      <p>6. Make previous, next and comment section ui better  - &#x2705;</p>
+      <p>7. Fix pagination  - &#x2705;</p>
+      <p>8. Add login steps in login page - &#x2705;</p>
+      <p>9. Fix google login button - &#x2705;</p>
+      <p>10. Link the novels in library</p>
+      <p>11. Make search button working</p>
+      <p style="font-weight: bolder; color: rgb(7, 255, 255);">12. Add premium option - &#x2705;</p>
+      <p style="font-weight: bolder; color: rgb(77, 255, 7);">13. Upload the Pfp button - &#x2705;</p>
+      <p style="font-weight: bolder; color: rgb(243, 255, 7);">14. Save user reading data</p>
+      <p>15. Add reading themes in premium</p>
+      <p>16. Add page flip style in premium</p>
+      <p style="font-weight: bolder; color: red;">17. Add comment section in library</p>
+      <p>18. Save the comments of user and show in profile</p>
+      <p>19. Request novels for premium users</p>
+      <p>20. Upload more novels (lol)</p> 
+      <p>21. View more button working</p>
+      <p style="font-weight: bolder; color: rgb(235, 105, 6);">22. Make this a PWA</p>
+      <p>--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x--x</p>
+    </div>
+  </section>
+
+  <script>
+    const starsContainer = document.querySelector('.stars');
+    const starCount = 200;
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+
+      const size = Math.random() * 3;
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+      const duration = Math.random() * 3 + 1 + 's';
+
+      star.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${left}%;
+        top: ${top}%;
+        --duration: ${duration};
+        filter: blur(${Math.random()}px);
+      `;
+
+      starsContainer.appendChild(star);
+    }
+  </script>
+</body>
+</html>

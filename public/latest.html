@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latest Novels</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1e293b;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #334155;
+      position: relative;
+      z-index: 100;
+    }
+    /* Logo / Back arrow */
+    .navbar-left {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-left-mobile img {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+    /* Centered search */
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .navbar-center input {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      background-color: #334155;
+      color: #f1f5f9;
+      font-size: 1rem;
+    }
+    /* Right‑side links & dropdown */
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .navbar-links a,
+    .navbar-right > a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .home-tool{
+      position: relative;
+    }
+    .home-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: 15px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .home-tool:hover .tooltip{
+      opacity: 1;
+    }
+    .library{
+      position: relative;
+    }
+    .library .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 42px;
+      left: 10px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .library:hover .tooltip{
+      opacity: 1;
+    }
+
+    .ranking{
+      position: relative;
+    }
+    .ranking .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: -2px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .ranking:hover .tooltip{
+      opacity: 1;
+    }
+
+    .profile-tool{
+      position: relative;
+    }
+    .profile-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: -12px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .profile-tool:hover .tooltip{
+      opacity: 1;
+    }
+
+    .community-tool{
+      position: relative;
+    }
+    .community-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: -30px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 13px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .community-tool:hover .tooltip{
+      opacity: 1;
+    }
+    /* Dropdown (hidden by default) */
+    .dropdown {
+      display: none;
+      position: relative;
+    }
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #f1f5f9;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      min-width: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #f1f5f9;
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background-color: #334155;
+    }
+    
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+@media (max-width: 768px) {
+  .card:hover {
+    transform: scale(1); /* Reduced scaling for mobile UI */
+  }
+}
+
+    /* Sections, cards, etc. (unchanged) */
+    .container { padding: 2rem; max-width: 1280px; margin: 0 auto; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .section-title { font-size: 1.5rem; font-weight: 700; }
+    .view-all { color: #94a3b8; font-size: 0.875rem; cursor: pointer; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.25rem; }
+    .card { background-color: #1e293b; border-radius: 0.65rem; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.2s ease; }
+    .card:hover { transform: scale(1.05); }
+    .card img { width: 100%; height: 200px; object-fit: cover; }
+    .card-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .card-meta { font-size: 0.8rem; color: #94a3b8; }
+    .icon-avatar { width: 32px; height: 32px; border-radius: 9999px; object-fit: cover; cursor: pointer; transition: transform 0.2s ease; }
+    .icon-avatar:hover { transform: scale(1.1); }
+    .latest-section { max-width: 1200px; margin: 0 auto; }
+    .novels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+    .novel-card { background: #2d3748; border-radius: 8px; padding: 1.5rem; transition: transform 0.3s; }
+    .novel-card:hover { transform: translateY(-5px); }
+    .novel-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.4; color: #cbd5e0; }
+    .novel-subtitle { font-size: 0.9rem; color: #718096; margin-bottom: 1rem; }
+    .chapter-count { font-size: 0.85rem; color: #48bb78; font-weight: 500; }
+    /* Adjust navbar for mobile */
+    @media (max-width: 768px) {
+  .card:hover {
+    transform: scale(1); /* Reduced scaling for mobile UI */
+  }
+}
+
+  @media (max-width: 768px) {
+    .navbar {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .navbar-left-mobile {
+      flex: 0;
+    }
+
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-right {
+      flex: 0;
+    }
+  }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      /* Logo swap */
+      .navbar-left-pc { display: none; }
+      .navbar-left-mobile { display: flex; }
+
+      /* Hide all regular nav items */
+      .navbar-links,
+      .nav-item {
+        display: none !important;
+      }
+      .navbar-right > a.nav-item {
+        display: none !important;
+      }
+
+      /* Show our “More ▼” dropdown */
+      .dropdown {
+        display: block;
+      }
+
+      /* Hide bottom nav entirely */
+      .mobile-navbar {
+        display: none;
+      }
+      
+
+      /* Stack cards full‑width on mobile */
+      .novels-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.5rem; }
+    }
+    @media (min-width: 769px) {
+      .navbar-left-mobile { display: none; }
+    }
+    
+    /* Mobile bottom navbar */
+    .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e293b;
+        padding: 0.5rem 0;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+      }
+
+      .mobile-navbar a {
+        color: #f1f5f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .mobile-navbar a img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Hide mobile navbar on larger screens */
+      .mobile-navbar {
+        display: flex;
+        visibility: visible;
+      }
+      
+
+    @media (min-width: 769px) {
+      .mobile-navbar {
+        visibility: hidden;
+      }
+    }
+    /* New wrapper for mobile navbar parts */
+.navbar-mobile-wrapper {
+  display: none;
+  width: 100%;
+}
+
+/* Default hide PC elements on mobile */
+.navbar-left-pc,
+.navbar-center-pc,
+.navbar-right-pc {
+  display: flex;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.9rem 1.3rem;
+  }
+
+  .navbar-mobile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .navbar-left-pc,
+  .navbar-center-pc,
+  .navbar-right-pc {
+    display: none !important;
+  }
+
+  .navbar-left-mobile {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 0.5rem;
+  }
+
+  .navbar-center input {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .navbar-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.more-button {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* spacing between "More" and arrow */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.arrow {
+  font-size: 0.75em;
+}
+@media (max-width: 768px) {
+  .section-spacing {
+    margin-bottom: 1rem !important; /* or adjust as needed */
+  }
+}
+@media (max-width: 768px) {
+  .novels-grid {
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-mobile-wrapper">
+      <!-- Mobile left (Popular) -->
+      <a href="index.html" class="navbar-left navbar-left-mobile">
+        <img src="https://i.ibb.co/twMCJrMP/Screenshot-2025-04-18-222419.png" alt="Back"/>Latest
+      </a>
+  
+      <!-- Mobile center (Search) -->
+      <div class="navbar-center">
+        <input type="text" placeholder="Search novels..." />
+      </div>
+  
+      <!-- Mobile right (More ▼) -->
+      <div class="navbar-right">
+        <!-- Mobile “More ▼” dropdown -->
+        <div class="dropdown">
+          <button id="dropdown-button" class="more-button">
+            <span>More</span>
+            <span class="arrow">▼</span>
+          </button>
+          <div id="dropdown-menu" class="dropdown-content">
+            <a href="ranking.html">Ranking</a>
+            <a href="popular.html">Popular</a>
+          </div>
+        </div>        
+      </div>
+    </div>
+  
+    <!-- PC logo -->
+    <a href="index.html" class="navbar-left navbar-left-pc home-tool">Novel Cult
+      <div class="tooltip">Home</div>
+    </a>
+  
+    <!-- PC Search and links -->
+    <div class="navbar-center navbar-center-pc">
+      <input type="text" placeholder="Search novels..." />
+    </div>
+  
+    <!-- PC Right nav -->
+    <div class="navbar-right navbar-right-pc">
+      <nav class="navbar-links">
+        <a href="my_list.html" class="nav-item">📚Library</a>
+        <a href="ranking.html" class="nav-item">Ranking</a>
+        <a href="popular.html" class="nav-item">Popular</a>
+      </nav>
+      <a href="profile.html">
+        <div class="profile-tool"><img src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Click me to go to Page 2" width="30">
+         <div class="tooltip">Profile</div>
+        </div>
+      </a>
+      <a href="community.html">
+        <div class="community-tool">
+          <img src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="Click me to go to Page 2" width="30">
+          <div class="tooltip">Community</div>
+        </div>
+      </a>
+    </div>
+  </header>  
+
+  <!-- (Your existing content: Latest Novels, Completed Novels, etc.) -->
+  <main class="container">
+    <div class="section-header">
+      <h2 class="section-title">Recently Updated</h2>
+      <div class="view-all">See more→</div>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <a href="shadow_slave_detail.html">
+              <img src="https://i.ibb.co/v6dngsSv/shadow-slave-for-web.jpg" alt="Click me to go to Page 2" width="200">
+             </a>
+            <div class="card-body">
+              <div class="card-title">
+                <a href="shadow_slave_detail.html" style = "color:white ;text-decoration-line: none;">Shadow Slave</a>
+              </div>
+              <div class="card-meta"> &nbsp;&nbsp;⭐ 4.8 &nbsp;&nbsp; 📖 Ch.1740 </div>
+              <div class="card-meta"> &nbsp;&nbsp;   </div>
+            </div>
+          </div>
+    
+          
+    
+          <div class="card">
+            <a href="tbate_detail.html">
+              <img src="https://i.ibb.co/RGd4GsG3/tbate-cover.jpg" alt="Click me to go to Page 2" width="120">
+             </a>
+            <div class="card-body">
+              <div class="card-title">
+                <a href="tbate_detail.html" style = "color:white ;text-decoration-line: none;">TBATE</a>
+              </div>
+              <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📖Ch.527 </div>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+  </main>
+  <main class="container">
+      <div class="section-header">
+        <h2 class="section-title">Completed Novels</h2>
+        <div class="view-all">See more→</div>
+      </div>
+      <div class="grid">
+       
+       
+        <div class="card">
+          <a href="lotm_detail.html">
+            <img src="https://i.ibb.co/21n48f23/lord-of-the-mysteries-cover.jpg" alt="Click me to go to Page 2" width="200">
+           </a>
+          <div class="card-body">
+            <div class="card-title">
+              <a href="lotm_detail.html" style = "color:white ;text-decoration-line: none;">LOTM</a>
+            </div>
+            
+            <div class="card-meta"> &nbsp;&nbsp;⭐ 9.9 &nbsp;&nbsp; 📗 Ch.1430 </div>
+          </div>
+        </div>
+       
+        <div class="card">
+          <a href="reverend_insanity_details.html">
+            <img src="https://i.ibb.co/tMWPN6LK/Reverend-Insanity-cover.jpg" alt="Click me to go to Page 2" width="200">
+           </a>
+          <div class="card-body">
+            <div class="card-title">
+              <a href="reverend_insanity_details.html" style = "color:white ;text-decoration-line: none;">Reverend Insanity</a>
+            </div>          
+            <div class="card-meta">&nbsp;&nbsp;⭐ 9.8 &nbsp;&nbsp; 📗Ch.2334 </div>
+          </div>
+        </div>
+        
+            
+        <div class="card">
+          <a href="mother_of_learning_detail.html">
+            <img src="https://i.ibb.co/j9Tdh6C5/Mother-of-Learning-cover.jpg" alt="Click me to go to Page 2" width="200">
+           </a>
+          <div class="card-body">
+            <div class="card-title">
+              <a href="mother_of_learning_detail.html" style = "color:white ;text-decoration-line: none;">Mother Of Learning</a>
+            </div>
+            <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📗Ch.108 </div>
+          </div>
+        </div>
+  
+        <div class="card">
+          <a href="sss_class_suicide_hunter.html">
+            <img src="https://i.ibb.co/zTZLJ4RY/SSS-Class-Suicide-Hunter-cover.jpg" alt="Click me to go to Page 2" width="200">
+           </a>
+          <div class="card-body">
+            <div class="card-title">
+              <a href="sss_class_suicide_hunter.html" style = "color:white ;text-decoration-line: none;" >SSS Class Suicide Hunter</a>
+            </div>          
+            <div class="card-meta">&nbsp;&nbsp;⭐ 9.6 &nbsp;&nbsp; 📗Ch.400 </div>
+          </div>
+        </div>
+  
+        <div class="card">
+          <a href="orv_details.html">
+            <img src="https://i.ibb.co/jPTdnT5K/orv-cover.webp" alt="Click me to go to Page 2" width="200">
+           </a>
+          <div class="card-body">
+            <div class="card-title">
+              <a href="orv_details.html" style = "color:white ;text-decoration-line: none;">ORV</a>
+            </div>          
+            <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📗Ch.552</div>
+          </div>
+    </div>
+  </main>
+
+  <!-- Bottom mobile nav hidden on mobile anyway -->
+  <nav class="mobile-navbar">
+    <a href="index.html">
+      <img src="https://i.ibb.co/GvvR7Bqm/Screenshot-2025-04-18-150902.png" alt="Home" />
+      <span>Home</span>
+    </a>
+    <a href="my_list.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="My List" />
+      <span>My List</span>
+    </a>
+    <a href="profile.html">
+      <img src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Home" />
+      <span>Profile</span>
+    </a>
+    <a href="community.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/settings-icon.png" alt="Settings" />
+      <span>Community</span>
+    </a>
+  </nav>
+
+  <script>
+    const dropdownButton = document.getElementById('dropdown-button');
+    const dropdownMenu   = document.getElementById('dropdown-menu');
+    dropdownButton.addEventListener('click', e => {
+      e.stopPropagation();
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', () => {
+      dropdownMenu.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<script>
+    const chaptersPerPage = 10;
+    const allChapters = [];
+    for (let i = 1; i <= 2334; i++) {
+      allChapters.push({
+        title: `Chapter ${i}: Sample Chapter Title`,
+        date: `2024-01-${String((i % 30) + 1).padStart(2, '0')}`
+      });
+    }
+  
+    let currentPage = 1;
+    const totalPages = Math.ceil(allChapters.length / chaptersPerPage);
+  
+    function renderChapters(page) {
+      const chapterList = document.querySelector(".chapter-list");
+      chapterList.innerHTML = '<div class="volume-title">📘 Chapters</div>';
+  
+      const start = (page - 1) * chaptersPerPage;
+      const end = start + chaptersPerPage;
+      const visibleChapters = allChapters.slice(start, end);
+  
+      visibleChapters.forEach(ch => {
+        const chapterHTML = `
+          <div class="chapter-row">
+            <a href="#">
+              <span>${ch.title}</span>
+              <span class="chapter-date">${ch.date}</span>
+            </a>
+          </div>`;
+        chapterList.innerHTML += chapterHTML;
+      });
+    }
+  
+    function renderPagination() {
+      const pagination = document.getElementById("pagination");
+      pagination.innerHTML = "";
+  
+      function createBtn(text, page, isActive = false, isDisabled = false) {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.disabled = isDisabled;
+        btn.style.margin = "0 5px";
+        btn.style.padding = "8px 14px";
+        btn.style.border = "1px solid #3b475a";
+        btn.style.borderRadius = "6px";
+        btn.style.backgroundColor = isActive ? "#3b82f6" : "transparent";
+        btn.style.color = isActive ? "#fff" : "#cbd5e1";
+        btn.style.cursor = "pointer";
+        btn.onclick = () => {
+          currentPage = page;
+          renderChapters(currentPage);
+          renderPagination();
+        };
+        pagination.appendChild(btn);
+      }
+  
+      createBtn("« First", 1, false, currentPage === 1);
+  
+      let start = Math.max(currentPage - 1, 1);
+      let end = Math.min(currentPage + 1, totalPages);
+  
+      if (start > 1) {
+        createBtn("1", 1, currentPage === 1);
+        if (start > 2) {
+          const dots = document.createElement("span");
+          dots.textContent = "...";
+          dots.style.margin = "0 8px";
+          dots.style.color = "#94a3b8";
+          pagination.appendChild(dots);
+        }
+      }
+  
+      for (let i = start; i <= end; i++) {
+        createBtn(i.toString(), i, currentPage === i);
+      }
+  
+      if (end < totalPages) {
+        if (end < totalPages - 1) {
+          const dots = document.createElement("span");
+          dots.textContent = "...";
+          dots.style.margin = "0 8px";
+          dots.style.color = "#94a3b8";
+          pagination.appendChild(dots);
+        }
+        createBtn(totalPages.toString(), totalPages);
+      }
+  
+      createBtn("Last »", totalPages, false, currentPage === totalPages);
+    }
+  
+    renderChapters(currentPage);
+    renderPagination();
+  </script>

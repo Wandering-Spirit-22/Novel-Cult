@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading - Novel Cult</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.8;
+        }
+
+        .reader-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .chapter-title {
+            font-size: 1.4rem;
+            color: #fa3737;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .content-wrapper {
+            background-color: #111;
+            border-radius: 8px;
+            padding: 30px 20px;
+            min-height: 70vh;
+        }
+
+        .chapter-content {
+    color: #e0e0e0;
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 1rem; /* Better base size for reading */
+    line-height: 1.6; /* Improves readability */
+    padding: 1.5rem 2rem;
+    text-align: justify;
+    word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+    .chapter-content {
+        font-size: 0.9rem; /* Never go below 16px for body text */
+        max-width: 100%;
+        padding: 1rem;
+        line-height: 1.5;
+        text-align: left; /* Justify can create rivers in mobile */
+    }
+}
+
+@media (min-width: 1200px) {
+    .chapter-content {
+        font-size: 1.2rem; /* Slightly larger for big screens */
+        max-width: 1000px;
+    }
+}
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+          .navigation-buttons {
+           flex-direction: row;
+           align-items:center;
+            margin-left: 12px;
+            margin-right: 12px;
+          }
+         .nav-button {
+            width: 100%;
+           height: 42px;
+          }
+      }
+
+      @media (min-width: 768px) {
+          .navigation-buttons {
+           flex-direction: row;
+           align-items:center;
+            margin-left: 42px;
+            margin-right: 42px;
+          }
+         .nav-button {
+            width: 100%;
+           height: 52px;
+          }
+      }
+        .nav-button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: opacity 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-button:hover {
+            opacity: 0.9;
+        }
+
+        .nav-button:disabled {
+            background-color: #3d3d3d;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* Comick-style mobile optimization */
+        @media (max-width: 768px) {
+            .reader-container {
+                padding: 10px;
+            }
+            
+            .chapter-content {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+            
+            .nav-button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .chapter-dropdown {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            max-height: 400px;
+            width: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .dropdown-container:hover .chapter-dropdown,
+        .dropdown-container.show .chapter-dropdown {
+            display: block;
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 8px 0;
+        }
+
+        .chapter-item {
+            padding: 8px 16px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .chapter-item:hover {
+            background: #2563eb;
+        }
+
+        .current-chapter {
+            background: #2d2d2d;
+            font-weight: 500;
+        }
+
+        .dropdown-header {
+            padding: 12px 16px;
+            color: #888;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        @media (max-width: 768px) {
+            .chapter-dropdown {
+                width: 160px;
+                max-height: 60vh;
+            }
+        }
+        /* Mobile layout */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.8rem 1.2rem;
+    height: 57px !important;
+  }
+
+  .navbar-mobile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .navbar-left-pc,
+  .navbar-center-pc,
+  .navbar-right-pc {
+    display: none !important;
+  }
+
+  .navbar-left-mobile {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 0.5rem;
+  }
+
+  .navbar-center input {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .navbar-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+@media (min-width: 769px) {
+      .navbar-left-mobile { display: none; }
+    }
+    
+    /* Mobile bottom navbar */
+    .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e293b;
+        transition: transform 0.3s ease-in-out;
+        padding: 0.5rem 0;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+        height: 59px !important;
+      }
+
+      .mobile-navbar a {
+        color: #f1f5f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .mobile-navbar a img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Hide mobile navbar on larger screens */
+      .mobile-navbar {
+        display: flex;
+        visibility: visible;
+      }
+      .mobile-navbar.hidden {
+  transform: translateY(100%);
+}
+      
+
+    @media (min-width: 769px) {
+      .mobile-navbar {
+        visibility: hidden;
+      }
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1e293b;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #334155;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+    }
+    .navbar.hidden {
+  transform: translateY(-100%);
+}
+
+    /* Logo / Back arrow */
+    .navbar-left {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-left-mobile img {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+    /* Centered search */
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar-center input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      background-color: #334155;
+      color: #f1f5f9;
+      font-size: 1rem;
+    }
+
+    .navbar-center .search-icon {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #f1f5f9;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .navbar-links a,
+    .navbar-right > a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    /* Dropdown (hidden by default) */
+    .dropdown {
+  
+      position: left;
+    }
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #f1f5f9;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .dropdown-content {
+
+      position: left;
+      right: 0;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      min-width: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #f1f5f9;
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background-color: #334155;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+@media (max-width: 768px) {
+  .card:hover {
+    transform: scale(1); /* Reduced scaling for mobile UI */
+  }
+}
+
+    .icon-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .icon-avatar:hover {
+      transform: scale(1.1);
+    }
+
+    .container {
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+
+.cover-img {
+      width: 280px;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    @media (max-width: 768px) {
+    .navbar {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .navbar-left-mobile {
+      flex: 0;
+    }
+
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-right {
+      flex: 0;
+    }
+  }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      /* Logo swap */
+      .navbar-left-pc { display: none; }
+      .navbar-left-mobile { display: flex; }
+
+      /* Hide all regular nav items */
+      .navbar-links,
+      .nav-item {
+        display: none !important;
+      }
+      .navbar-right > a.nav-item {
+        display: none !important;
+      }
+
+      /* Show our “More ▼” dropdown */
+      .dropdown {
+        display: block;
+      }
+
+      /* Hide bottom nav entirely */
+      .mobile-navbar {
+        display: none;
+      }
+      
+
+      /* Stack cards full‑width on mobile */
+      .novels-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.5rem; }
+    }
+    @media (min-width: 769px) {
+      .navbar-left-mobile { display: none; }
+    }
+    
+    /* Mobile bottom navbar */
+    .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e293b;
+        padding: 0.5rem 0;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+      }
+
+      .mobile-navbar a {
+        color: #f1f5f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .mobile-navbar a img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Hide mobile navbar on larger screens */
+      .mobile-navbar {
+        display: flex;
+        visibility: visible;
+      }
+      
+
+    @media (min-width: 769px) {
+      .mobile-navbar {
+        visibility: hidden;
+      }
+    }
+    .comment-section {
+    margin: 40px 20px;
+    padding: 20px;
+    background: #2a2a2a;
+    border-radius: 8px;
+}
+
+#comments-container {
+    margin-bottom: 20px;
+}
+
+.comment {
+    padding: 10px;
+    margin: 10px 0;
+    background: #333;
+    border-radius: 4px;
+    color: #e0e0e0;
+}
+
+#comment-text {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #333;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+    resize: vertical;
+}
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <!-- PC logo -->
+        <a href="index.html" class="navbar-left navbar-left-pc">Novel Cult</a>
+        <!-- Mobile back‑arrow + label -->
+        <a href="index.html" class="navbar-left navbar-left-mobile">
+          <img src="https://i.ibb.co/twMCJrMP/Screenshot-2025-04-18-222419.png" alt="Back"/>Reading
+        </a>
+        
+            <div class="navbar-center">
+              <input type="text" placeholder="Search novels..." />
+            </div>
+        
+           <!-- Right side -->
+        <div class="navbar-right">
+            <!-- Desktop links -->
+            <nav class="navbar-links">
+              <a href="my_list.html" class="nav-item">📚Library</a>
+              <a href="ranking.html" class="nav-item">Ranking</a>
+              
+            </nav>
+            <!-- Desktop icons -->
+            <a href="profile.html" class="nav-item">
+              <img class="icon-avatar" src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Profile"/>
+            </a>
+            <a href="community.html" class="nav-item">
+              <img class="icon-avatar" src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="Community"/>
+            </a>
+      
+            <!-- Mobile “More ▼” dropdown -->
+            <div class="dropdown">
+                <div class="dropdown-container" id="dropdownContainer">
+                    <button class="menu-button" id="menuButton">Chapters▼</button>
+                    <div class="chapter-dropdown" id="chapterDropdown">
+                        <div class="dropdown-header">Chapters List</div>
+                        <ul class="chapter-list" id="chapterList"></ul>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </header>
+        <div class="chapter-title" id="chapter-title">Loading Chapter...</div>
+        <div style="width: 40px;"></div>
+        <div class="content-wrapper">
+            <div class="chapter-content" id="chapter-content"></div>
+        </div>
+
+        <div class="navigation-buttons">
+          <button class="nav-button" id="prevBtn" onclick="previousChapter(); window.scrollTo(0,0)">Previous</button>
+          <button class="nav-button" id="nextBtn" onclick="nextChapter(); window.scrollTo({top:0, behavior:'smooth'})">Next</button>
+      </div>
+       <!-- Add This Comment Section -->
+<div class="comment-section">
+  <h3>Comments</h3>
+  <div id="comments-container"></div>
+  <form id="comment-form">
+      <textarea id="comment-text" placeholder="Add comment..." required></textarea>
+      <button type="submit" class="nav-button">Post Comment</button>
+  </form>
+</div>
+
+    <script>
+        let currentChapter = 1;
+        const totalChapters = 2334; // Update this with actual total chapters
+
+        async function loadChapter(chapterNumber) {
+            try {
+                const response = await fetch('richapters.json');
+                const data = await response.json();
+                
+                const chapter = data[chapterNumber - 1];
+                if (!chapter) throw new Error('Chapter not found');
+
+                document.title = `Chapter ${chapterNumber} - Novel Cult`;
+                document.getElementById('chapter-title').textContent = 
+                    `Chapter ${chapterNumber}: ${chapter.title}`;
+                document.getElementById('chapter-content').innerHTML = chapter.content;
+
+                // Update navigation buttons
+                document.getElementById('prevBtn').disabled = chapterNumber === 1;
+                document.getElementById('nextBtn').disabled = chapterNumber === totalChapters;
+                
+                currentChapter = chapterNumber;
+                history.replaceState(null, '', `?chapter=${chapterNumber}`);
+                
+            } catch (error) {
+                document.getElementById('chapter-content').innerHTML = 
+                    `<p style="color: #ff4444">Error loading chapter: ${error.message}</p>`;
+            }
+        }
+
+        function previousChapter() {
+            if (currentChapter > 1) loadChapter(currentChapter - 1);
+        }
+
+        function nextChapter() {
+            if (currentChapter < totalChapters) loadChapter(currentChapter + 1);
+        }
+        // Previous JavaScript code remains the same
+        
+        async function initializeChapterList() {
+            try {
+                const response = await fetch('richapters.json');
+                const chapters = await response.json();
+                const chapterList = document.getElementById('chapterList');
+                
+                chapters.forEach((chapter, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'chapter-item';
+                    li.textContent = `Chapter ${index + 1}`;
+                    li.addEventListener('click', () => {
+                        loadChapter(index + 1);
+                        document.getElementById('chapterDropdown').style.display = 'none';
+                    });
+                    chapterList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error loading chapter list:', error);
+            }
+        }
+
+        // Toggle dropdown visibility
+        document.getElementById('menuButton').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('chapterDropdown').style.display = 
+                document.getElementById('chapterDropdown').style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('chapterDropdown').style.display = 'none';
+            }
+        });
+
+        // Update current chapter highlight
+        function updateCurrentChapterHighlight(chapterNumber) {
+            document.querySelectorAll('.chapter-item').forEach((item, index) => {
+                item.classList.toggle('current-chapter', index + 1 === chapterNumber);
+            });
+            
+            // Scroll to current chapter
+            const currentItem = document.querySelector('.current-chapter');
+            if (currentItem) {
+                currentItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Modified loadChapter function
+        async function loadChapter(chapterNumber) {
+            try {
+                const response = await fetch('richapters.json');
+                const data = await response.json();
+                
+                const chapter = data[chapterNumber - 1];
+                if (!chapter) throw new Error('Chapter not found');
+
+                // Update UI
+                document.title = `Chapter ${chapterNumber} - Novel Cult`;
+                document.getElementById('chapter-title').textContent = 
+                    `Chapter ${chapterNumber}: ${chapter.title}`;
+                document.getElementById('chapter-content').innerHTML = chapter.content;
+
+                // Update navigation
+                document.getElementById('prevBtn').disabled = chapterNumber === 1;
+                document.getElementById('nextBtn').disabled = chapterNumber === totalChapters;
+                updateCurrentChapterHighlight(chapterNumber);
+                
+                currentChapter = chapterNumber;
+                history.replaceState(null, '', `?chapter=${chapterNumber}`);
+                
+            } catch (error) {
+                document.getElementById('chapter-content').innerHTML = 
+                    `<p style="color: #ff4444">Error loading chapter: ${error.message}</p>`;
+            }
+        }
+
+        // Initialize when page loads
+        initializeChapterList();
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialChapter = parseInt(urlParams.get('chapter')) || 1;
+        loadChapter(initialChapter);
+    </script>
+
+    <!-- Add before any Firebase code -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDrMY8IGn5c0UScMyzGmxo_wIb13jrOQUM",
+    authDomain: "novel-cult-d989e.firebaseapp.com",
+    projectId: "novel-cult-d989e",
+    storageBucket: "novel-cult-d989e.firebasestorage.app",
+    messagingSenderId: "878327056169",
+    appId: "1:878327056169:web:d4f52ff530300d21d79938",
+    measurementId: "G-G27QHBM9T8"
+  };
+  firebase.initializeApp(firebaseConfig); // ← MISSING IN orvch.html
+</script>
+
+<script> // Comment System
+  async function loadComments() {
+      const novelId = new URLSearchParams(window.location.search).get('novel');
+      const chapterNumber = new URLSearchParams(window.location.search).get('chapter');
+      
+      const commentsRef = firebase.firestore()
+          .collection(`novels/${novelId}/chapters/${chapterNumber}/comments`)
+          .orderBy('timestamp', 'desc');
+  
+      commentsRef.onSnapshot(snapshot => {
+          const container = document.getElementById('comments-container');
+          container.innerHTML = '';
+          
+          snapshot.forEach(doc => {
+              const comment = doc.data();
+              const commentHTML = `
+                  <div class="comment">
+                      <strong>${comment.userName}</strong>
+                      <span style="color: #888; font-size: 0.9em">
+                          ${new Date(comment.timestamp?.toDate()).toLocaleString()}
+                      </span>
+                      <p>${comment.text}</p>
+                  </div>
+              `;
+              container.innerHTML += commentHTML;
+          });
+      });
+  }
+  
+  // Comment Submission
+  document.getElementById('comment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const user = firebase.auth().currentUser;
+      if (!user) return alert('Please login to comment');
+      
+      const commentText = document.getElementById('comment-text').value;
+      const novelId = new URLSearchParams(window.location.search).get('novel');
+      const chapterNumber = new URLSearchParams(window.location.search).get('chapter');
+  
+      try {
+          await firebase.firestore()
+              .collection(`novels/${novelId}/chapters/${chapterNumber}/comments`)
+              .add({
+                  text: commentText,
+                  userId: user.uid,
+                  userName: user.displayName || 'Anonymous',
+                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+              });
+              
+          document.getElementById('comment-text').value = '';
+      } catch (error) {
+          console.error('Error posting comment:', error);
+          alert('Error posting comment');
+      }
+  });
+  
+  // Initialize comments after page load
+  document.addEventListener('DOMContentLoaded', () => {
+      loadComments();
+  });
+      </script>
+
+<nav class="mobile-navbar">
+    <a href="index.html">
+      <img src="https://i.ibb.co/GvvR7Bqm/Screenshot-2025-04-18-150902.png" alt="Home" />
+      <span>Home</span>
+    </a>
+    <a href="my_list.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="My List" />
+      <span>My List</span>
+    </a>
+    <a href="profile.html">
+      <img src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Home" />
+      <span>Profile</span>
+    </a>
+    <a href="community.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/settings-icon.png" alt="Settings" />
+      <span>Community</span>
+    </a>
+  </nav>
+  <script>
+  const topNav = document.querySelector('.navbar');
+const bottomNav = document.querySelector('.mobile-navbar');
+
+document.addEventListener('click', (e) => {
+  // Only toggle if clicking outside both navbars
+  if (!e.target.closest('.navbar') && !e.target.closest('.mobile-navbar')) {
+    topNav.classList.toggle('hidden');
+    bottomNav.classList.toggle('hidden');
+  }
+});
+
+// Prevent hiding when clicking inside navbars
+topNav.addEventListener('click', (e) => e.stopPropagation());
+bottomNav.addEventListener('click', (e) => e.stopPropagation());
+    </script>
+</body>
+</html>

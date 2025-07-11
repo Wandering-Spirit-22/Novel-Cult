@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mother Of Learning - Novel Cult</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e2633;
+      color: #fff;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1e293b;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #334155;
+    }
+
+    /* Logo / Back arrow */
+    .navbar-left {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-left-mobile img {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+    /* Centered search */
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar-center input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      background-color: #334155;
+      color: #f1f5f9;
+      font-size: 1rem;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-left: 2rem;
+    }
+    .navbar-links a,
+    .navbar-right > a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .home-tool{
+      position: relative;
+    }
+    .home-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: 15px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .home-tool:hover .tooltip{
+      opacity: 1;
+    }
+    /* Dropdown (hidden by default) */
+    .dropdown {
+      display: none;
+      position: relative;
+    }
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #f1f5f9;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      min-width: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #f1f5f9;
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background-color: #334155;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+@media (max-width: 768px) {
+  .card:hover {
+    transform: scale(1); /* Reduced scaling for mobile UI */
+  }
+}
+    .icon-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .icon-avatar:hover {
+      transform: scale(1.1);
+    }
+    
+    .container {
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+
+    .novel-header {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .cover-img {
+      width: 280px;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    @media (max-width: 768px) {
+    .navbar {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .navbar-left-mobile {
+      flex: 0;
+    }
+
+    .navbar-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-right {
+      flex: 0;
+    }
+  }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      /* Logo swap */
+      .navbar-left-pc { display: none; }
+      .navbar-left-mobile { display: flex; }
+
+      /* Hide all regular nav items */
+      .navbar-links,
+      .nav-item {
+        display: none !important;
+      }
+      .navbar-right > a.nav-item {
+        display: none !important;
+      }
+
+      /* Show our “More ▼” dropdown */
+      .dropdown {
+        display: block;
+      }
+
+      /* Hide bottom nav entirely */
+      .mobile-navbar {
+        display: none;
+      }
+      
+
+      /* Stack cards full‑width on mobile */
+      .novels-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.5rem; }
+    }
+    @media (min-width: 769px) {
+      .navbar-left-mobile { display: none; }
+    }
+    
+    /* Mobile bottom navbar */
+    .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e293b;
+        padding: 0.5rem 0;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+      }
+
+      .mobile-navbar a {
+        color: #f1f5f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .mobile-navbar a img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Hide mobile navbar on larger screens */
+      .mobile-navbar {
+        display: flex;
+        visibility: visible;
+      }
+      
+
+    @media (min-width: 769px) {
+      .mobile-navbar {
+        visibility: hidden;
+      }
+    }
+
+    .info {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    .alt-titles span {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .details p {
+      margin: 6px 0;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    .followers {
+      color: #5fa8d3;
+    }
+
+    .action-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .read-btn, .follow-btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .follow-btn {
+      background-color: #374151;
+    }
+
+    .read-btn:hover {
+      background-color: #1e40af;
+    }
+
+    .follow-btn:hover {
+      background-color: #4b5563;
+    }
+
+    .description {
+      margin-top: 40px;
+    }
+
+    .description p {
+      font-size: 1rem;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+   .tag-container {
+     margin-top: 30px;
+     color: #f1f5f9;
+     font-family: sans-serif;
+    }
+
+   .tag-container h2 {
+     margin-bottom: 10px;
+     font-size: 1.3rem;
+    }
+
+   .tag-box {
+     background-color: #1e293b; /* Dark card look */
+     padding: 20px;
+     border-radius: 12px;
+     display: flex;
+     flex-wrap: wrap;
+     gap: 10px;
+     box-shadow: 0 0 0 1px #334155; /* Subtle outline */
+    }
+
+   .tag {
+     background-color: transparent;
+     border: 1px solid #475569;
+     border-radius: 999px;
+     padding: 6px 14px;
+     color: #cbd5e1;
+     font-size: 0.95rem;
+     transition: all 0.2s ease-in-out;
+     cursor: pointer;
+    }
+
+   .tag:hover {
+     background-color: #334155;
+     border-color: #3b82f6;
+     color: #e0f2fe;
+    }
+
+    .tag-list {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 10px;
+     margin-top: 10px;
+    }
+
+    .tag {
+      padding: 6px 14px;
+      border: 1px solid #5f6a7d;
+      border-radius: 20px;
+      color: white;
+     font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .recommendations {
+      margin-top: 50px;
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    @media (mix-width: 768px) {
+    .rec-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 cards per line */
+      gap: 10px; /* Maintain spacing between the cards */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rec-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 cards per line */
+      gap: 20px; /* Maintain spacing between the cards */
+    }
+  }
+    .rec-item {
+      text-align: center;
+    }
+
+
+    .rec-item p {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #90caf9;
+    }
+
+    h2, h3 {
+      color: #f5f5f5;
+    }
+
+    .chapter-list {
+        margin-top: 20px;
+    }
+
+    .volume-title {
+        margin: 30px 0 10px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #f1f5f9;
+    }
+
+    .chapter-row {
+     background-color: #2c3443;
+     margin-bottom: 10px;
+     border-radius: 22px;
+     overflow: hidden;
+     transition: background-color 0.2s;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-row {
+        width: 440px; /* Full width on mobile */
+      }
+    }
+
+    
+    @media (min-width: 768px) {
+      .chapter-row {
+        width: 1200px; /* Full width on mobile */
+      }
+    }
+
+    .chapter-row a {
+     display: flex;
+     justify-content: space-between;
+     padding: 14px 18px;
+     text-decoration: none;
+     color: #cbd5e1;
+     font-size: 0.95rem;
+    }
+
+   .chapter-row:hover {
+     background-color: #3b475a;
+    }
+
+    .chapter-date {
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .rec-item img {
+     width: 160px;          /* set a standard width */
+     height: 240px;         /* set a standard height */
+     object-fit: cover;     /* keeps aspect ratio but fills the box */
+     border-radius: 8px;
+     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+     transition: transform 0.3s ease;
+    }
+
+    .rec-item img:hover {
+      transform: scale(1.05); /* subtle hover zoom */
+    }
+
+    .follow-btn.followed {
+      background-color: #16a34a !important;
+    }
+    /* Mobile layout */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.8rem 1.2rem;
+  }
+
+  .navbar-mobile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .navbar-left-pc,
+  .navbar-center-pc,
+  .navbar-right-pc {
+    display: none !important;
+  }
+
+  .navbar-left-mobile {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 0.5rem;
+  }
+
+  .navbar-center input {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .navbar-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.more-button {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* spacing between "More" and arrow */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.arrow {
+  font-size: 0.75em;
+}
+
+  </style>
+</head>
+<body>
+       <!-- NAVBAR -->
+  <header class="navbar">
+    <!-- PC logo -->
+    <a href="index.html" class="navbar-left navbar-left-pc home-tool">Novel Cult
+      <div class="tooltip">Home</div>
+    </a>
+    <!-- Mobile back‑arrow + label -->
+    <a href="index.html" class="navbar-left navbar-left-mobile">
+      <img src="https://i.ibb.co/twMCJrMP/Screenshot-2025-04-18-222419.png" alt="Back"/>Details
+    </a>
+    
+        <div class="navbar-center">
+          <input type="text" placeholder="Search novels..." />
+        </div>
+    
+       <!-- Right side -->
+    <div class="navbar-right">
+        <!-- Desktop links -->
+        <nav class="navbar-links">
+          <a href="my_list.html" class="nav-item">📚Library</a>
+          <a href="ranking.html" class="nav-item">Ranking</a>
+          <a href="latest.html" class="nav-item">Latest</a>
+          <a href="popular.html" class="nav-item">Popular</a>
+        </nav>
+        <!-- Desktop icons -->
+        <a href="profile.html" class="nav-item">
+          <img class="icon-avatar" src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Profile"/>
+        </a>
+        <a href="community.html" class="nav-item">
+          <img class="icon-avatar" src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="Community"/>
+        </a>
+  
+        <!-- Mobile “More ▼” dropdown -->
+        <div class="dropdown">
+          <button id="dropdown-button" class="more-button">
+            <span>More</span>
+            <span class="arrow">▼</span>
+          </button>
+          <div id="dropdown-menu" class="dropdown-content">
+            <a href="ranking.html">Ranking</a>
+            <a href="latest.html">Latest</a>
+            <a href="popular.html">Popular</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+  <div class="container">
+    <!-- Top Section -->
+    <div class="novel-header">
+      <img src="https://i.ibb.co/21n48f23/lord-of-the-mysteries-cover.jpg" alt="lord-of-the-mysteries-cover" class="cover-img" />
+      <div class="info">
+        <h1>Lord Of The Mysteries</h1>
+        <div class="alt-titles">
+          <span>诡秘之主</span> • <span></span>
+        </div>
+        <div class="details">
+          <p><strong>Origination:</strong> Novel</p>
+          <p><strong>Author:</strong>Cuttlefish That Loves Diving</p>
+          <p><strong>Published:</strong> 2022</p>
+         <p><strong>Status:</strong> <span id="status-indicator" class="status-indicator">📗</span> Completed</p>
+          <p><strong>Translation:</strong> 📗 Completed</p>
+          <p><strong>Ranked:</strong> #1 <span class="followers">Followed by 1 user</span></p>
+          <p><strong>⭐ Rating:</strong> 9.90</p>
+        </div>
+        <div class="action-buttons">
+          <div class="action-buttons">
+            <a href="readlotm.html" class="read-btn" style="text-decoration: none;">▶ Start Reading</a>
+          <button class="follow-btn" 
+              data-title="Lord Of The Mysteries" 
+              data-image="https://i.ibb.co/21n48f23/lord-of-the-mysteries-cover.jpg">
+             🔖 Follow
+            </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <h2>Description</h2>
+      <p>In the waves of steam and machinery, who could achieve extraordinary? In the fogs of history and darkness, who was whispering? I woke up from the realm of mysteries and opened my eyes to the world.
+
+        Firearms, cannons, battleships, airships, and difference machines. Potions, divination, curses, hanged-man, and sealed artifacts… The lights shone brightly, yet the secrets of the world were never far away. This was a legend of the “Fool”....</p>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags">
+      <h3 class="tags-p">Tags</h3>
+      <div class="tag-list">
+        <span class="tag">Alchemy</span>
+        <span class="tag">Fantasy</span>
+        <span class="tag">Dark</span>
+        <span class="tag">Magic</span>
+        <span class="tag">Curses</span>
+        <span class="tag">Monsters</span>
+        <span class="tag">Determined Protagonist</span>
+        <span class="tag">Detectives</span>
+        <span class="tag">Evil Organizations</span>
+        <span class="tag">Ghosts</span>
+        <span class="tag">Ghore</span>
+        <span class="tag">Manipulative Characters</span>
+        <span class="tag">Religions</span>
+        <span class="tag">Transmigration</span>
+      </div>
+    </div>
+
+    <div class="chapter-list"></div>
+    <div id="pagination" style="margin-top: 30px; text-align: center;"></div>
+
+      
+    <script>
+      const chaptersPerPage = 10;
+      const allChapters = [];
+  
+      fetch('lotmchapters.json').then(response => response.json()).then(data => {
+  
+        data.forEach(element => {
+            allChapters.push({title: element.title, date: element.date})
+        });
+  
+        let currentPage = 1;
+      const totalPages = Math.ceil(allChapters.length / chaptersPerPage);
+    
+      function renderChapters(page) {
+        const chapterList = document.querySelector(".chapter-list");
+        chapterList.innerHTML = '<div class="volume-title">📘 Chapters</div>';
+    
+        const start = (page - 1) * chaptersPerPage;
+        const end = start + chaptersPerPage;
+        const visibleChapters = allChapters.slice(start, end);
+    
+        visibleChapters.forEach((ch, i) => {
+        const chapterNumber = start + i + 1; // Calculate actual chapter number
+        const chapterHTML = `
+          <div class="chapter-row">
+            <a href="readlotm.html?chapter=${chapterNumber}">
+              <span>Chapter ${chapterNumber}: ${ch.title}</span>
+              <span class="chapter-date">${ch.date}</span>
+            </a>
+          </div>`;
+        chapterList.innerHTML += chapterHTML;
+      });
+      }
+    
+      function renderPagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+    
+        function createBtn(text, page, isActive = false, isDisabled = false) {
+          const btn = document.createElement("button");
+          btn.textContent = text;
+          btn.disabled = isDisabled;
+          btn.style.margin = "0 5px";
+          btn.style.padding = "8px 14px";
+          btn.style.border = "1px solid #3b475a";
+          btn.style.borderRadius = "6px";
+          btn.style.backgroundColor = isActive ? "#3b82f6" : "transparent";
+          btn.style.color = isActive ? "#fff" : "#cbd5e1";
+          btn.style.cursor = "pointer";
+          btn.onclick = () => {
+            currentPage = page;
+            renderChapters(currentPage);
+            renderPagination();
+          };
+          pagination.appendChild(btn);
+        }
+    
+        createBtn("« First", 1, false, currentPage === 1);
+    
+        let start = Math.max(currentPage - 1, 1);
+        let end = Math.min(currentPage + 1, totalPages);
+    
+        if (start > 1) {
+          createBtn("1", 1, currentPage === 1);
+          if (start > 2) {
+            const dots = document.createElement("span");
+            dots.textContent = "...";
+            dots.style.margin = "0 8px";
+            dots.style.color = "#94a3b8";
+            pagination.appendChild(dots);
+          }
+        }
+    
+        for (let i = start; i <= end; i++) {
+          createBtn(i.toString(), i, currentPage === i);
+        }
+    
+        if (end < totalPages) {
+          if (end < totalPages - 1) {
+            const dots = document.createElement("span");
+            dots.textContent = "...";
+            dots.style.margin = "0 8px";
+            dots.style.color = "#94a3b8";
+            pagination.appendChild(dots);
+          }
+          createBtn(totalPages.toString(), totalPages);
+        }
+    
+        createBtn("Last »", totalPages, false, currentPage === totalPages);
+      }
+    
+      renderChapters(currentPage);
+      renderPagination();
+      });
+  
+    </script>
+      
+
+    <!-- Recommendations -->
+    <div class="recommendations" >
+      <h3>Recommendations</h3>
+      <div class="rec-grid">
+        <div class="rec-item">
+            <a href="shadow_slave_detail.html">
+                <img src="https://i.ibb.co/v6dngsSv/shadow-slave-for-web.jpg" alt="Click me to go to Page 2" width="200">
+               </a>
+          <p>Shadow Slave </p>
+        </div>
+        <div class="rec-item">
+            <a href="mother_of_learning_detail.html">
+                <img src="https://i.ibb.co/j9Tdh6C5/Mother-of-Learning-cover.jpg" alt="Click me to go to Page 2" width="200">
+               </a>
+          <p>Mother Of Learning</p>
+        </div>
+        <div class="rec-item">
+            <a href="tbate_detail.html">
+                <img src="https://i.ibb.co/RGd4GsG3/tbate-cover.jpg" alt="Click me to go to Page 2" width="200">
+               </a>
+          <p>TBATE</p>
+        </div>
+        
+        <div class="rec-item">
+            <a href="orv_details.html">
+                <img src="https://i.ibb.co/jPTdnT5K/orv-cover.webp" alt="Click me to go to Page 2" width="200">
+               </a>
+          <p>ORV</p>
+        </div>
+        <div class="rec-item">
+            <a href="sss_class_suicide_hunter.html">
+                <img src="https://i.ibb.co/zTZLJ4RY/SSS-Class-Suicide-Hunter-cover.jpg" alt="Click me to go to Page 2" width="200">
+               </a>
+            <p>SSS Class Suicide Hunter</p>
+        </div>
+        <div class="rec-item">
+            <a href="reverend_insanity_details.html">
+                <img src="https://i.ibb.co/tMWPN6LK/Reverend-Insanity-cover.jpg" alt="Click me to go to Page 2" width="200">
+          <p>Reverend Insanity</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const followBtn = document.querySelector(".follow-btn");
+        const novelTitle = followBtn.getAttribute("data-title");
+        const novelImage = followBtn.getAttribute("data-image");
+  
+        // Function to update button state
+        function updateFollowButton() {
+          const followedNovels = JSON.parse(localStorage.getItem("followedNovels") || "[]");
+          const isFollowed = followedNovels.some(novel => novel.title === novelTitle);
+  
+          if (isFollowed) {
+            followBtn.textContent = "✔ Followed";
+            followBtn.classList.add('followed');
+          } else {
+            followBtn.textContent = "🔖 Follow";
+            followBtn.classList.remove('followed');
+          }
+        }
+  
+        // Initial button state
+        updateFollowButton();
+  
+        // Toggle follow functionality
+        followBtn.addEventListener("click", function () {
+          let followedNovels = JSON.parse(localStorage.getItem("followedNovels") || "[]");
+          const novelIndex = followedNovels.findIndex(novel => novel.title === novelTitle);
+  
+          if (novelIndex === -1) {
+            // Add to list
+            followedNovels.push({
+              title: novelTitle,
+              image: novelImage,
+              chapters: 1432,
+              rating: 9.9,
+              status: "Completed",
+              lastRead: "-",
+              updated: "2yrs",
+              added: Date.now(),
+            });
+          } else {
+            // Remove from list
+            followedNovels.splice(novelIndex, 1);
+          }
+  
+          localStorage.setItem("followedNovels", JSON.stringify(followedNovels));
+          updateFollowButton();
+        });
+      });
+    </script>
+   <!-- Bottom mobile nav hidden on mobile anyway -->
+   <nav class="mobile-navbar">
+    <a href="index.html">
+      <img src="https://i.ibb.co/GvvR7Bqm/Screenshot-2025-04-18-150902.png" alt="Home" />
+      <span>Home</span>
+    </a>
+    <a href="my_list.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="My List" />
+      <span>My List</span>
+    </a>
+    <a href="profile.html">
+      <img src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Home" />
+      <span>Profile</span>
+    </a>
+    <a href="community.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/settings-icon.png" alt="Settings" />
+      <span>Community</span>
+    </a>
+  </nav>
+
+  <script>
+    const dropdownButton = document.getElementById('dropdown-button');
+    const dropdownMenu   = document.getElementById('dropdown-menu');
+    dropdownButton.addEventListener('click', e => {
+      e.stopPropagation();
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', () => {
+      dropdownMenu.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>

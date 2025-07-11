@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Novel Cult - Discover and Read Web Novels</title>
+
+<!-- SEO Tags -->
+<meta name="description" content="Discover trending and latest web novels on Novel Cult. Follow your favorite series and read online for free.">
+<meta name="keywords" content="novel cult, web novels, light novels, online novels, read novels, novel updates, novelcult">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://novelcult.site/">
+
+<!-- Open Graph (for social sharing + better SEO) -->
+<meta property="og:title" content="Novel Cult - Discover and Read Web Novels">
+<meta property="og:description" content="Read trending web novels online for free. Updated regularly with new chapters.">
+<meta property="og:url" content="https://novelcult.site/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://novelcult.site/cover.jpg"> <!-- replace with actual image if available -->
+
+<link rel="icon" href="/favicon.png" type="image/png">
+
+<!-- Fonts (keep as-is) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #0d1829;
+      padding: 1rem 1rem;
+      border-bottom: 1px solid #334155;
+    }
+
+    .navbar-left {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .navbar-center {
+      flex: 10;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin: 0 1rem; /* Add margin to create spacing around the search bar */
+      
+    }
+
+    .search-img{
+      position: relative;
+      left: -40px;
+      top: 2px;
+      border-radius: 10px;
+            
+    }
+    .search-img .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 46px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+
+    .search-img:hover .tooltip{
+      opacity: 1;
+      
+    }
+
+    .library{
+      position: relative;
+    }
+    .library .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 42px;
+      left: 10px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .library:hover .tooltip{
+      opacity: 1;
+    }
+
+    .ranking{
+      position: relative;
+    }
+    .ranking .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: -2px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .ranking:hover .tooltip{
+      opacity: 1;
+    }
+
+    .profile-tool{
+      position: relative;
+    }
+    .profile-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: -15px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 14px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .profile-tool:hover .tooltip{
+      opacity: 1;
+    }
+
+    .community-tool{
+      position: relative;
+    }
+    .community-tool .tooltip{
+      position: absolute;
+      background-color: rgb(87, 87, 112);
+      top: 40px;
+      left: -39px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0;
+      font-size: 13px;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .community-tool:hover .tooltip{
+      opacity: 1;
+    }
+    .premium-tool {
+  position: absolute;
+  top: 5px;
+  left: 122px;
+  z-index: 1000;
+}
+
+.premium-tool .tooltip {
+  position: absolute;
+  background-color: rgb(87, 87, 112);
+  top: 69px;
+  width: 75px;
+  left: -2px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  color: white;
+  opacity: 0;
+  font-size: 14px;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.premium-tool:hover .tooltip {
+  opacity: 1;
+}
+
+    .navbar-center input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      background-color: #334155;
+      color: #f1f5f9;
+      font-size: 1rem;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-left: 2rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+  main.container {
+    padding-bottom: 5rem; /* Add extra padding to prevent overlap with the bottom navbar */
+  }
+}
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .view-all {
+      color: #94a3b8;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background-color: #1e293b;
+      border-radius: 0.65rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.13);
+    }
+    @media (max-width: 768px) {
+  .card:hover {
+    transform: scale(1.05); /* Reduced scaling for mobile UI */
+  }
+}
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-meta {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .icon-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .icon-avatar:hover {
+      transform: scale(1.1);
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0 15px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #1e293b;
+      min-width: 120px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #334155;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .dropbtn {
+        padding: 0 10px;
+      }
+      
+      .dropdown-content {
+        left: 0;
+        transform: none;
+      }
+      
+      /* Mobile bottom navbar */
+      .mobile-navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1e293b;
+        padding: 0.5rem 0;
+        border-top: 1px solid #334155;
+        z-index: 1000;
+      }
+
+      .mobile-navbar a {
+        color: #f1f5f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .mobile-navbar a img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Hide mobile navbar on larger screens */
+      .mobile-navbar {
+        display: flex;
+        visibility: visible;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-navbar {
+        visibility: hidden;
+      }
+    }
+    .hamburger-menu {
+      display: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hamburger-menu div {
+      width: 25px;
+      height: 3px;
+      background-color: #f1f5f9;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: #1e293b;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      transition: left 0.3s ease;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .drawer.open {
+      left: 0;
+    }
+
+    .drawer a {
+      display: block;
+      padding: 0.5rem 0;
+      color: #f1f5f9;
+      text-decoration: none;
+      font-size: 1.25rem;
+    }
+
+    .drawer a:hover {
+      background-color: #334155;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-right {
+        display: none;
+      }
+
+      .hamburger-menu {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .drawer {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ✅ FINAL NAVBAR -->
+  <header class="navbar">
+    <div class="navbar-left">Novel Cult</div>
+
+    <div class="navbar-center">
+      <input type="text" placeholder="Search novels..." />
+      <div class="search-img"><img src="https://i.ibb.co/VpgNC4Wz/search-btn.png" width="30">
+        <div class="tooltip">Search</div>
+      </div>  
+    </div>
+
+    <div class="navbar-right">
+      <div class="navbar-links">
+        <a href="my_list.html" class="library" style="text-decoration: none; color: inherit;">📚Library
+          <div class="tooltip">My List</div>
+        </a>
+        
+      </div>
+      <div class="navbar-links">
+        <a href="ranking.html" class="ranking" style="text-decoration: none; color: inherit;">Ranking
+          <div class="tooltip">Ranking</div>
+        </a>
+        
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">More ▼</button>
+        <div class="dropdown-content">
+          <a href="latest.html" style="text-decoration: none; color: inherit;">Latest</a>
+          <a href="popular.html" style="text-decoration: none; color: inherit;">Popular</a>
+        </div>
+      </div>
+      <a href="profile.html">
+        <div class="profile-tool"><img src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Click me to go to Page 2" width="30">
+         <div class="tooltip">Profile</div>
+        </div>
+      </a>
+      <a href="community.html">
+        <div class="community-tool"><img src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="Click me to go to Page 2" width="30">
+          <div class="tooltip">Community</div>
+        </div>
+      </a>
+      <a href="premium.html">
+        <div class="premium-tool"><img src="https://i.ibb.co/9mtKfNtc/premium-buttom.png" alt="Click me to go to Page 2" width="62">
+         <div class="tooltip">Click me</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu" id="hamburger-menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+
+  <!-- Drawer -->
+  <div class="drawer" id="drawer">
+    <a href="index.html" style="font-weight: bold; font-size:x-large;">Novel Cult</a>
+    <a href="my_list.html">📚 Library</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="latest.html">Latest</a>
+    <a href="popular.html">Popular</a>
+    <a href="community.html">Community</a>
+    <a href="premium.html" style=" background: linear-gradient(to right, #09203f, #537895); font-weight: bold; border-radius: 10px;">
+  <img src="https://i.ibb.co/9mtKfNtc/premium-buttom.png" alt="Premium Icon" style="width: 30px;  vertical-align: middle; margin-right: 4px;">
+  Premium
+</a>
+  </div>
+
+  <main class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Novels</h2>
+      <div class="view-all">View all</div>
+    </div>
+    <div class="grid">
+     
+      <div class="card">
+        <a href="shadow_slave_detail.html">
+         <img src="https://i.ibb.co/v6dngsSv/shadow-slave-for-web.jpg" alt="Click me to go to Page 2" width="200">
+        </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="shadow_slave_detail.html" style = "color:white ;text-decoration-line: none;">Shadow Slave</a>
+          </div>          
+          <div class="card-meta"> &nbsp;&nbsp;⭐ 9.75 &nbsp; 📖Ch.1740 </div>
+          <div class="card-meta"> &nbsp;&nbsp;   </div>
+       </div>
+      </div>
+     
+      <div class="card">
+        <a href="lotm_detail.html">
+          <img src="https://i.ibb.co/21n48f23/lord-of-the-mysteries-cover.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="lotm_detail.html" style = "color:white ;text-decoration-line: none;">LOTM</a>
+          </div>
+          
+          <div class="card-meta"> &nbsp;&nbsp;⭐ 9.9 &nbsp;&nbsp; 📗 Ch.1430 </div>
+        </div>
+      </div>
+     
+      <div class="card">
+        <a href="reverend_insanity_details.html">
+          <img src="https://i.ibb.co/tMWPN6LK/Reverend-Insanity-cover.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="reverend_insanity_details.html" style = "color:white ;text-decoration-line: none;">Reverend Insanity</a>
+          </div>          
+          <div class="card-meta">&nbsp;&nbsp;⭐ 9.8 &nbsp;&nbsp; 📗Ch.2334 </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <a href="tbate_detail.html">
+          <img src="https://i.ibb.co/RGd4GsG3/tbate-cover.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="tbate_detail.html" style = "color:white ;text-decoration-line: none;">TBATE</a>
+          </div>
+          <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📖Ch.527 </div>
+        </div>
+      </div>
+          
+      <div class="card">
+        <a href="mother_of_learning_detail.html">
+          <img src="https://i.ibb.co/j9Tdh6C5/Mother-of-Learning-cover.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="mother_of_learning_detail.html" style = "color:white ;text-decoration-line: none;">Mother Of Learning</a>
+          </div>
+          <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📗Ch.108 </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <a href="sss_class_suicide_hunter.html">
+          <img src="https://i.ibb.co/zTZLJ4RY/SSS-Class-Suicide-Hunter-cover.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="sss_class_suicide_hunter.html" style = "color:white ;text-decoration-line: none;" >SSS Class Suicide Hunter</a>
+          </div>          
+          <div class="card-meta">&nbsp;&nbsp;⭐ 9.6 &nbsp;&nbsp; 📗Ch.400 </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <a href="orv_details.html">
+          <img src="https://i.ibb.co/jPTdnT5K/orv-cover.webp" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="orv_details.html" style = "color:white ;text-decoration-line: none;">ORV</a>
+          </div>          
+          <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📗Ch.552</div>
+        </div>
+      </div>
+
+      
+      <!-- Add other cards here -->
+    </div>
+    
+    <div class="section-header" style="margin-top: 3rem;">
+      <h2 class="section-title">Latest Updates</h2>
+      <div class="view-all">View all</div>
+    </div>
+    <div class="grid">
+      <!-- Reuse cards here as well -->
+      <!-- Example card -->
+
+      <div class="card">
+        <a href="shadow_slave_detail.html">
+          <img src="https://i.ibb.co/v6dngsSv/shadow-slave-for-web.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="shadow_slave_detail.html" style = "color:white ;text-decoration-line: none;">Shadow Slave</a>
+          </div>
+          <div class="card-meta"> &nbsp;&nbsp;⭐ 4.8 &nbsp;&nbsp; 📖 Ch.1740 </div>
+          <div class="card-meta"> &nbsp;&nbsp;   </div>
+        </div>
+      </div>
+
+      
+
+      <div class="card">
+        <a href="tbate_detail.html">
+          <img src="https://i.ibb.co/RGd4GsG3/tbate-cover.jpg" alt="Click me to go to Page 2" width="200">
+         </a>
+        <div class="card-body">
+          <div class="card-title">
+            <a href="tbate_detail.html" style = "color:white ;text-decoration-line: none;">TBATE</a>
+          </div>
+          <div class="card-meta">&nbsp;&nbsp;⭐ 9.4 &nbsp;&nbsp; 📖Ch.527 </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navbar -->
+  <nav class="mobile-navbar">
+    <a href="index.html">
+      <img src="https://i.ibb.co/GvvR7Bqm/Screenshot-2025-04-18-150902.png" alt="Home" />
+      <span>Home</span>
+    </a>
+    <a href="my_list.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/Screenshot-2025-04-16-181325.png" alt="My List" />
+      <span>My List</span>
+    </a>
+    <a href="profile.html">
+      <img src="https://i.ibb.co/ZRBCPT9k/Screenshot-2025-04-16-181414.png" alt="Home" />
+      <span>Profile</span>
+    </a>
+    <a href="community.html">
+      <img src="https://i.ibb.co/TqmzgV3Q/settings-icon.png" alt="Settings" />
+      <span>Community</span>
+    </a>
+  </nav>
+
+  <script>
+   const hamburgerMenu = document.getElementById('hamburger-menu');
+const drawer = document.getElementById('drawer');
+
+// Toggle Drawer Open/Close
+hamburgerMenu.addEventListener('click', (e) => {
+  drawer.classList.toggle('open');
+  e.stopPropagation(); // Prevent the click event from propagating to the document
+});
+
+// Close Drawer when clicking outside
+document.addEventListener('click', (e) => {
+  if (!drawer.contains(e.target) && !hamburgerMenu.contains(e.target)) {
+    drawer.classList.remove('open');
+  }
+});
+  </script>
+  <!-- Firebase SDKs (Compat Version) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <!-- Initialize Firebase -->
+  <script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyDrMY8IGn5c0UScMyzGmxo_wIb13jrOQUM",
+    authDomain: "novel-cult-d989e.firebaseapp.com",
+    projectId: "novel-cult-d989e",
+    storageBucket: "novel-cult-d989e.firebasestorage.app",
+    messagingSenderId: "878327056169",
+    appId: "1:878327056169:web:d4f52ff530300d21d79938",
+    measurementId: "G-G27QHBM9T8"
+  };
+
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</body>
+</html>
