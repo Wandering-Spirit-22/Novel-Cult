@@ -15,7 +15,7 @@
 ---
 
 > **Note:** This was my first ever project. I built it and launched it as a real website. After learning about potential copyright issues with hosting novel content, I decided not to develop it further. Because of that, the site only has 6-7 novels and some features are left incomplete. I'm keeping this repo as an archive of where I started.
-
+ THAT IS WHY I CHANGED THE PLAN AND MADE A IMDB RATING LIKE SITE FOR NOVELS THAT'S CURRENTLY LIVE https://novelcult.online/. THE CODE OF LIVE ONE IS PRIVATE.
 ---
 
 ## Overview
